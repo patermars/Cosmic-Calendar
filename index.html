@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon with Lewis - Registration</title>
+    <style>
+        /* Apply Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6d5bba, #8d58bf);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #4a47a3;
+        }
+
+        p {
+            font-size: 14px;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        select:focus {
+            border-color: #6d5bba;
+            outline: none;
+        }
+
+        .radio-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .radio-group label {
+            display: inline-block;
+            margin-left: 8px;
+            font-weight: 400;
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #4a47a3;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3b3795;
+        }
+
+        #date-picker {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            margin: 20px auto;
+            display: none;
+        }
+
+        #solar-system {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #sun {
+            width: 50px;
+            height: 50px;
+            background-color: yellow;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #earth-orbit {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #earth {
+            width: 24px;
+            height: 24px;
+            background-color: blue;
+            border-radius: 50%;
+            position: absolute;
+            cursor: move;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .calendar-icon {
+            position: relative;
+            left: 190px;
+            bottom: 50px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .dob-group {
+            display: block;
+            align-items: center;
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Hackathon with Lewis - Registration</h1>
+    <p>Are you up for a challenge? Join us for a wild 7-day hackathon with Lewis! Whether you're a coding newbie or a tech wizard, this is your chance to have a blast, learn new stuff, and show off your skills. Come for the fun, stay for the epic memories.</p>
+    <p>Please make sure you use your contact e-mail address; you will be notified through it if you win.</p>
+
+    <form>
+        <fieldset>
+            <legend>Participant Information</legend>
+            <label for="name">Name *</label>
+            <input type="text" id="name" name="name" placeholder="Your Answer" required>
+
+            <label for="github">GitHub Profile *</label>
+            <input type="url" id="github" name="github" placeholder="Your Answer" required>
+            <div class="dob-group">
+                <label for="dob">Date of Birth</label>
+                <input type="text" id="dob" name="dob" required readonly>
+                <span class="calendar-icon">&#128197;</span>
+
+                <div id="date-picker">
+                    <div id="solar-system">
+                        <div id="sun"></div>
+                        <div id="earth-orbit">
+                            <div id="earth"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <label>Are you registering in a team or as a solo participant? *</label>
+            <div class="radio-group" id="participation">
+                <input type="radio" id="team" name="participation" value="team" required>
+                <label for="team">Team</label><br>
+
+                <input type="radio" id="solo" name="participation" value="solo" required>
+                <label for="solo">Solo participant</label>
+            </div>
+
+        </fieldset>
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+</body>
+<script>
+    const earthOrbit = document.getElementById('earth-orbit');
+        const earth = document.getElementById('earth');
+        const selectedDate = document.getElementById('dob');
+        const datePicker = document.getElementById('date-picker');
+        const calendarIcon = document.querySelector('.calendar-icon');
+
+        let angle = 0;
+        let selectedYear = new Date().getFullYear();
+        let isDragging = false;
+
+        earth.addEventListener('mousedown', startDragging);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stopDragging);
+
+        earth.addEventListener('touchstart', startDragging);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('touchend', stopDragging);
+
+        calendarIcon.addEventListener('click', function () {
+            datePicker.style.display = datePicker.style.display === 'none' ? 'block' : 'none';
+        });
+
+        function startDragging(e) {
+            isDragging = true;
+            e.preventDefault();
+        }
+
+        function stopDragging() {
+            isDragging = false;
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+
+            const rect = earthOrbit.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            let clientX, clientY;
+
+            if (e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            angle = Math.atan2(clientY - centerY, clientX - centerX);
+            updateEarthPosition();
+            updateSelectedDate();
+        }
+
+        function updateEarthPosition() {
+            const orbitRadius = earthOrbit.offsetWidth / 2;
+            const earthRadius = earth.offsetWidth / 2;
+            const radius = orbitRadius - earthRadius + 10;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            earth.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+        }
+
+        function updateSelectedDate() {
+            const normalizedAngle = (angle + Math.PI) / (2 * Math.PI);
+            const days = Math.floor(normalizedAngle * 365);
+            const date = new Date(selectedYear, 0, days);
+            selectedDate.value = date.toISOString().split('T')[0];
+
+            const monthsPassed = Math.floor(normalizedAngle * 12);
+            if (monthsPassed === 11 && normalizedAngle > 0.96) {
+                selectedYear++;
+            } else if (monthsPassed === 0 && normalizedAngle < 0.04) {
+                selectedYear--;
+            }
+        }
+
+        // Initialize the date picker
+        updateEarthPosition();
+        updateSelectedDate();
+</script>
+</html>
