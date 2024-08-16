@@ -1,4 +1,4 @@
-                                                  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -117,15 +117,20 @@
         }
 
         #sun {
-            width: 50px;
-            height: 50px;
-            background-color: yellow;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#sun img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
         #earth-orbit {
             width: 200px;
@@ -139,30 +144,28 @@
         }
 
         #earth {
-            width: 24px;
-            height: 24px;
-            background-color: blue;
-            border-radius: 50%;
-            position: absolute;
-            cursor: move;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    cursor: move;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#earth img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
         .calendar-icon {
             position: relative;
             left: 190px;
             bottom: 50px;
             transform: translateY(-50%);
-            cursor: pointer;
-        }
-
-        .dob-group {
-            display: block;
-            align-items: center;
-            position: relative;
-        }
+            curso    .dob-group {3 hidden lines}
 
     </style>
 </head>
@@ -188,9 +191,9 @@
 
                 <div id="date-picker">
                     <div id="solar-system">
-                        <div id="sun"></div>
+                        <div id="sun"><img src="sun.png" alt="Sun"></div>
                         <div id="earth-orbit">
-                            <div id="earth"></div>
+                            <div id="earth"><img src="earth.png" alt="Earth"></div>
                         </div>
                     </div>
                 </div>
@@ -230,8 +233,24 @@
         document.addEventListener('touchend', stopDragging);
 
         calendarIcon.addEventListener('click', function () {
-            datePicker.style.display = datePicker.style.display === 'none' ? 'block' : 'none';
-        });
+    if (datePicker.style.display === 'none' || datePicker.style.display === '') {
+        datePicker.style.display = 'block';
+
+        // Set initial Earth position
+        earth.style.transform = `translate(100px, 10px) translate(-50%, -50%)`;
+
+        // Calculate and update the angle based on the new position
+        const rect = earthOrbit.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        angle = Math.atan2(10 - centerY, 100 - centerX);
+
+        // Update the selected date based on the new position
+        updateSelectedDate();
+    } else {
+        datePicker.style.display = 'none';
+    }
+});
 
         function startDragging(e) {
             isDragging = true;
