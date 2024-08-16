@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+                                                  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -273,19 +273,33 @@
             earth.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
         }
 
-        function updateSelectedDate() {
-            const normalizedAngle = (angle + Math.PI) / (2 * Math.PI);
-            const days = Math.floor(normalizedAngle * 365);
-            const date = new Date(selectedYear, 0, days);
-            selectedDate.value = date.toISOString().split('T')[0];
+    let lastAngle = angle;
 
-            const monthsPassed = Math.floor(normalizedAngle * 12);
-            if (monthsPassed === 11 && normalizedAngle > 0.96) {
-                selectedYear++;
-            } else if (monthsPassed === 0 && normalizedAngle < 0.04) {
-                selectedYear--;
-            }
+    function updateSelectedDate() {
+        const fullRotation = 2 * Math.PI;
+        const normalizedAngle = (angle + Math.PI) % fullRotation;
+        const normalizedLastAngle = (lastAngle + Math.PI) % fullRotation;
+
+        // Check if we've crossed the year boundary
+        if (normalizedAngle < normalizedLastAngle && 
+            Math.abs(normalizedAngle - normalizedLastAngle) > Math.PI) {
+            selectedYear++;
+        } else if (normalizedAngle > normalizedLastAngle && 
+                   Math.abs(normalizedAngle - normalizedLastAngle) > Math.PI) {
+            selectedYear--;
         }
+
+        const daysInYear = isLeapYear(selectedYear) ? 366 : 365;
+        const days = Math.floor((normalizedAngle / fullRotation) * daysInYear);
+        const date = new Date(selectedYear, 0, days);
+        selectedDate.value = date.toISOString().split('T')[0];
+
+        lastAngle = angle;
+    }
+
+    function isLeapYear(year) {
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    }
 
         // Initialize the date picker
         updateEarthPosition();
