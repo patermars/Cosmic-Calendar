@@ -15,6 +15,9 @@ Ever thought, "Gee, picking dates is so boring. If only I could play God and spi
 2. Open the HTML file
 3. Question your life choices
 
+## 💭 Lewis Reaction to Cosmic Calendar 
+[Lewis' Reaction](https://youtu.be/pTxbAryTbAk?t=4129)
+
 ## 🤔 Why?
 
 Why not? If we can put a man on the moon, we can certainly make date selection a cosmic experience!
